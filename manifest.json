@@ -1,0 +1,10 @@
+{
+	"id": "d2-obsidian",
+	"name": "D2",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Render D2 diagrams",
+	"author": "Terrastruct",
+	"authorUrl": "https://d2lang.com",
+	"isDesktopOnly": true
+}

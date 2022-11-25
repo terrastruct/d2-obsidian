@@ -1,0 +1,39 @@
+name: ci
+on: [push]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/yarn/v6
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: TERM=xterm-256color ./make.sh fmt
+        env:
+          GITHUB_TOKEN: ${{ secrets._GITHUB_TOKEN }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/yarn/v6
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install
+        run: TERM=xterm-256color yarn
+      - run: TERM=xterm-256color ./make.sh build
+        env:
+          GITHUB_TOKEN: ${{ secrets._GITHUB_TOKEN }}
