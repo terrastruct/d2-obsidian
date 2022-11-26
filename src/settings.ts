@@ -49,17 +49,19 @@ export class D2SettingsTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Layout engine")
 			.setDesc(
-				'Available layout engines include "dagre", "elk", and "tala" (TALA must be bundled with D2)'
+				'Available layout engines include "dagre", "ELK", and "TALA" (TALA must be installed separately from D2)'
 			)
-			.addText((text) =>
-				text
-					.setPlaceholder("Enter a layout engine")
+			.addDropdown((dropdown) => {
+				dropdown
+					.addOption("dagre", "dagre")
+					.addOption("elk", "ELK")
+					.addOption("tala", "TALA")
 					.setValue(this.plugin.settings.layoutEngine)
 					.onChange(async (value) => {
 						this.plugin.settings.layoutEngine = value;
 						await this.plugin.saveSettings();
-					})
-			);
+					});
+			});
 
 		new Setting(containerEl)
 			.setName("API token")
@@ -71,8 +73,12 @@ export class D2SettingsTab extends PluginSettingTab {
 					.setPlaceholder("tstruct_...")
 					.setValue("")
 					.onChange(async (value) => {
-						this.plugin.settings.apiToken = value;
-						await this.plugin.saveSettings();
+						if (!value?.startsWith("tstruct_")) {
+							new Notice("Invalid API token");
+						} else {
+							this.plugin.settings.apiToken = value;
+							await this.plugin.saveSettings();
+						}
 					})
 			);
 
