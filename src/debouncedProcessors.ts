@@ -5,9 +5,8 @@ import { D2Processor } from "./processor";
 
 import D2Plugin from "./main";
 
+const SECONDS_MS = 1000;
 export class DebouncedProcessors implements Processor {
-	SECONDS_TO_MS_FACTOR = 1000;
-
 	debounceMap = new Map<
 		string,
 		Debouncer<
@@ -21,8 +20,7 @@ export class DebouncedProcessors implements Processor {
 
 	constructor(plugin: D2Plugin) {
 		this.plugin = plugin;
-		this.debounceTime =
-			plugin.settings.debounce * this.SECONDS_TO_MS_FACTOR;
+		this.debounceTime = plugin.settings.debounce * SECONDS_MS;
 	}
 
 	getProcessor(): Processor {
@@ -49,7 +47,7 @@ export class DebouncedProcessors implements Processor {
 	) => {
 		el.createEl("h6", {
 			text: "Generating D2 diagram...",
-			cls: "d2-loading",
+			cls: "D2__Loading",
 		});
 
 		if (el.dataset.D2Debounce) {

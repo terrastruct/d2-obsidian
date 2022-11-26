@@ -1,7 +1,8 @@
 import { MarkdownPostProcessorContext } from "obsidian";
 import { exec } from "child_process";
 
-import D2Plugin from "../main";
+import D2Plugin from "./main";
+import Utils from "./utils";
 
 export function insertImage(el: HTMLElement, image: string) {
 	el.empty();
@@ -32,7 +33,7 @@ export class D2Processor implements Processor {
 		try {
 			const image = await this.generatePreview(
 				source,
-				this.plugin.replacer.getPath(ctx)
+				Utils.getPath(this.plugin, ctx)
 			);
 			if (image) {
 				insertImage(el, image);
