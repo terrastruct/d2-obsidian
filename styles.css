@@ -1,8 +1,12 @@
-/*
+.D2_loading {
+	font-style: italic;
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.Preview__Error--Title {
+	color: #be0b41;
+}
 
-If your plugin does not need CSS, delete this file.
-
-*/
+.Preview__Error {
+	white-space: pre;
+	white-space: pre-wrap;
+}

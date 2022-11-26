@@ -12,10 +12,11 @@
     "isolatedModules": true,
 	"strictNullChecks": true,
     "lib": [
+      "ES2021",
       "DOM",
       "ES5",
       "ES6",
-      "ES7"
+      "ES7",
     ]
   },
   "include": [
