@@ -1,57 +1,81 @@
-import { MarkdownPostProcessorContext } from "obsidian";
+import { debounce, Debouncer, MarkdownPostProcessorContext } from "obsidian";
 import { exec } from "child_process";
 
 import D2Plugin from "./main";
-import Utils from "./utils";
 
-export function insertImage(el: HTMLElement, image: string) {
-	el.empty();
-
-	const parser = new DOMParser();
-	const svg = parser.parseFromString(image, "image/svg+xml");
-
-	el.insertAdjacentHTML("beforeend", svg.documentElement.outerHTML);
-	const svgEl = el.children[0];
-	// Have svg image be contained within the obsidian window
-	svgEl.setAttribute("preserveAspectRatio", "xMinYMin slice");
-	svgEl.removeAttribute("width");
-	svgEl.removeAttribute("height");
-}
+const SECOND_MS = 1000;
 
 export class D2Processor implements Processor {
 	plugin: D2Plugin;
+	debounceTime: number;
+	debouncer?: Debouncer<[string, HTMLElement], Promise<void>>;
+	prevImage: string;
 
 	constructor(plugin: D2Plugin) {
 		this.plugin = plugin;
+		this.debounceTime = plugin.settings.debounce * SECOND_MS;
 	}
 
-	export = async (
+	debounceExport = async (
 		source: string,
 		el: HTMLElement,
-		ctx: MarkdownPostProcessorContext
+		_: MarkdownPostProcessorContext
 	) => {
-		try {
-			const image = await this.generatePreview(
-				source,
-				Utils.getPath(this.plugin, ctx)
-			);
-			if (image) {
-				insertImage(el, image);
-			}
-		} catch (err) {
-			el.empty();
-			el.createEl("div", {
-				text: "D2 Compilation Error:",
-				cls: "Preview__Error--Title",
-			});
-			el.createEl("div", { text: err.message, cls: "Preview__Error" });
+		el.createEl("h6", {
+			text: "Generating D2 diagram...",
+			cls: "D2__Loading",
+		});
+		if (this.debouncer) {
+			await this.debouncer(source, el);
+		} else {
+			const func = debounce(this.export, this.debounceTime, true);
+			this.debouncer = func;
+			await this.export(source, el);
 		}
 	};
 
-	async generatePreview(source: string, path: string): Promise<string> {
+	insertImage(el: HTMLElement, image: string) {
+		this.prevImage = image;
+		const parser = new DOMParser();
+		const svg = parser.parseFromString(image, "image/svg+xml");
+
+		const svgEl = svg.documentElement;
+		// Have svg image be contained within the obsidian window
+		svgEl.setAttribute("preserveAspectRatio", "xMinYMin slice");
+		svgEl.removeAttribute("width");
+		svgEl.removeAttribute("height");
+		el.insertAdjacentHTML("beforeend", svg.documentElement.outerHTML);
+	}
+
+	export = async (source: string, el: HTMLElement) => {
+		try {
+			const image = await this.generatePreview(source);
+			if (image) {
+				el.empty();
+				this.insertImage(el, image);
+			}
+		} catch (err) {
+			el.empty();
+			const errorEl = el.createEl("pre", {
+				cls: "markdown-rendered pre Preview__Error",
+			});
+			errorEl.createEl("code", {
+				text: "D2 Compilation Error:",
+				cls: "Preview__Error--Title",
+			});
+			errorEl.createEl("code", {
+				text: err.message,
+			});
+			if (this.prevImage) {
+				this.insertImage(el, this.prevImage);
+			}
+		}
+		this.debouncer = undefined;
+	};
+
+	async generatePreview(source: string): Promise<string> {
 		const options = {
 			encoding: "utf-8",
-			cwd: path,
 		};
 		const env: any = {
 			...process.env,

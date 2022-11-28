@@ -3,10 +3,12 @@
 }
 
 .Preview__Error--Title {
-	color: #be0b41;
+	color: #be0b41 !important;
 }
 
 .Preview__Error {
+	display: flex;
+	flex-direction: column;
 	white-space: pre;
 	white-space: pre-wrap;
 }
