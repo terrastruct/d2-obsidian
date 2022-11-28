@@ -78,9 +78,11 @@ export class D2Processor {
 			encoding: "utf-8",
 			env: {
 				...process.env,
-				PATH: [process.env.PATH, `${process.env.HOME}/go/bin`].join(
-					":"
-				),
+				PATH: [
+					process.env.PATH,
+					`${process.env.HOME}/go/bin`,
+					"/opt/homebrew/bin",
+				].join(":"),
 			},
 		};
 
