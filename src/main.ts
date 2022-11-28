@@ -1,7 +1,6 @@
 import { Plugin } from "obsidian";
 
 import { D2PluginSettings, D2SettingsTab, DEFAULT_SETTINGS } from "./settings";
-// import { DebouncedProcessors } from "./debouncedProcessor";
 import { D2Processor } from "./processor";
 
 export default class D2Plugin extends Plugin {

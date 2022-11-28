@@ -79,9 +79,7 @@ export class D2Processor {
 		};
 		const env: any = {
 			...process.env,
-			PATH: [process.env.PATH, `${this.plugin.settings.goPath}/bin`].join(
-				":"
-			),
+			PATH: [process.env.PATH, `${process.env.HOME}/go/bin`].join(":"),
 		};
 
 		if (this.plugin.settings.apiToken) {

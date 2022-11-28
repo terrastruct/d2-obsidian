@@ -3,7 +3,6 @@ import { Notice, App, PluginSettingTab, Setting } from "obsidian";
 import D2Plugin from "./main";
 
 export interface D2PluginSettings {
-	goPath: string;
 	layoutEngine: string;
 	apiToken: string;
 	debounce: number;
@@ -11,7 +10,6 @@ export interface D2PluginSettings {
 }
 
 export const DEFAULT_SETTINGS: D2PluginSettings = {
-	goPath: "/usr/local/go",
 	layoutEngine: "dagre",
 	debounce: 3,
 	theme: 0,
@@ -32,19 +30,6 @@ export class D2SettingsTab extends PluginSettingTab {
 		containerEl.empty();
 
 		containerEl.createEl("h2", { text: "D2 Plugin settings" });
-
-		new Setting(containerEl)
-			.setName("GOPATH")
-			.setDesc("Specify GOPATH here to allow us to find D2")
-			.addText((text) =>
-				text
-					.setPlaceholder("Enter your go path")
-					.setValue(this.plugin.settings.goPath)
-					.onChange(async (value) => {
-						this.plugin.settings.goPath = value;
-						await this.plugin.saveSettings();
-					})
-			);
 
 		new Setting(containerEl)
 			.setName("Layout engine")
