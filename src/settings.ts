@@ -56,9 +56,9 @@ export class D2SettingsTab extends PluginSettingTab {
 			.addText((text) =>
 				text
 					.setPlaceholder("tstruct_...")
-					.setValue("")
+					.setValue(this.plugin.settings.apiToken)
 					.onChange(async (value) => {
-						if (!value?.startsWith("tstruct_")) {
+						if (value && !value.startsWith("tstruct_")) {
 							new Notice("Invalid API token");
 						} else {
 							this.plugin.settings.apiToken = value;

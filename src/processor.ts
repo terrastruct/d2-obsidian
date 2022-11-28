@@ -74,16 +74,19 @@ export class D2Processor {
 	};
 
 	async generatePreview(source: string): Promise<string> {
-		const options = {
+		const options: any = {
 			encoding: "utf-8",
-		};
-		const env: any = {
-			...process.env,
-			PATH: [process.env.PATH, `${process.env.HOME}/go/bin`].join(":"),
+			env: {
+				...process.env,
+				PATH: [process.env.PATH, `${process.env.HOME}/go/bin`].join(
+					":"
+				),
+			},
 		};
 
 		if (this.plugin.settings.apiToken) {
-			env.TSTRUCT_TOKEN = this.plugin.settings.apiToken;
+			console.log("here", this.plugin.settings.apiToken);
+			options.env.TSTRUCT_TOKEN = this.plugin.settings.apiToken;
 		}
 
 		let args = [`d2`, "-", "-", "--theme", this.plugin.settings.theme];
@@ -93,7 +96,7 @@ export class D2Processor {
 			args = args.concat(["--layout", this.plugin.settings.layoutEngine]);
 		}
 		const cmd = args.join(" ");
-		const child = exec(cmd, { ...options, env });
+		const child = exec(cmd, options);
 		child.stdin?.write(source);
 		child.stdin?.end();
 
