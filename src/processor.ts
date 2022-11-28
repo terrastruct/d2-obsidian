@@ -85,7 +85,6 @@ export class D2Processor {
 		};
 
 		if (this.plugin.settings.apiToken) {
-			console.log("here", this.plugin.settings.apiToken);
 			options.env.TSTRUCT_TOKEN = this.plugin.settings.apiToken;
 		}
 
