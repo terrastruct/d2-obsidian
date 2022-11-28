@@ -5,7 +5,7 @@ import D2Plugin from "./main";
 
 const SECOND_MS = 1000;
 
-export class D2Processor implements Processor {
+export class D2Processor {
 	plugin: D2Plugin;
 	debounceTime: number;
 	debouncer?: Debouncer<[string, HTMLElement], Promise<void>>;
