@@ -8,7 +8,9 @@ Settings > Community plugins > Browse > Search for D2
 
 ### Installing D2
 
-D2 must be installed for this plugin to work, for instructions on how to install D2, click [here](https://github.com/terrastruct/d2#install)
+D2 must be installed for this plugin to work, for instructions on how to install D2, click [here](https://github.com/terrastruct/d2#install).
+
+In the future, we will release a version of this Plugin that allows the user to choose either a local or server version of D2.
 
 ### Configuring the Plugin
 
