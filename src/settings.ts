@@ -11,7 +11,7 @@ export interface D2PluginSettings {
 
 export const DEFAULT_SETTINGS: D2PluginSettings = {
 	layoutEngine: "dagre",
-	debounce: 3,
+	debounce: 500,
 	theme: 0,
 	apiToken: "",
 };
@@ -90,21 +90,33 @@ export class D2SettingsTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Debounce")
-			.setDesc("How often should the diagram refresh in seconds")
+			.setDesc(
+				"How often should the diagram refresh in milliseconds (min 100)"
+			)
 			.addText((text) =>
 				text
 					.setPlaceholder(String(DEFAULT_SETTINGS.debounce))
 					.setValue(String(this.plugin.settings.debounce))
 					.onChange(async (value) => {
 						//make sure that there is always some value defined, or reset to default
-						if (!isNaN(Number(value)) || value === undefined) {
-							this.plugin.settings.debounce = Number(
-								value || DEFAULT_SETTINGS.debounce
-							);
-							await this.plugin.saveSettings();
-						} else {
+						if (isNaN(Number(value))) {
 							new Notice("Please specify a valid number");
+							this.plugin.settings.debounce = Number(
+								DEFAULT_SETTINGS.debounce
+							);
+						} else if (value === undefined) {
+							this.plugin.settings.debounce = Number(
+								DEFAULT_SETTINGS.debounce
+							);
+						} else if (Number(value) < 100) {
+							new Notice("The value must be greater than 100");
+							this.plugin.settings.debounce = Number(
+								DEFAULT_SETTINGS.debounce
+							);
+						} else {
+							this.plugin.settings.debounce = Number(value);
 						}
+						await this.plugin.saveSettings();
 					})
 			);
 	}

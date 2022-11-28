@@ -3,8 +3,6 @@ import { exec } from "child_process";
 
 import D2Plugin from "./main";
 
-const SECOND_MS = 1000;
-
 export class D2Processor {
 	plugin: D2Plugin;
 	debounceTime: number;
@@ -13,7 +11,7 @@ export class D2Processor {
 
 	constructor(plugin: D2Plugin) {
 		this.plugin = plugin;
-		this.debounceTime = plugin.settings.debounce * SECOND_MS;
+		this.debounceTime = plugin.settings.debounce;
 	}
 
 	debounceExport = async (
@@ -28,8 +26,7 @@ export class D2Processor {
 		if (this.debouncer) {
 			await this.debouncer(source, el);
 		} else {
-			const func = debounce(this.export, this.debounceTime, true);
-			this.debouncer = func;
+			this.debouncer = debounce(this.export, this.debounceTime, true);
 			await this.export(source, el);
 		}
 	};
