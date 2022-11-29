@@ -32,6 +32,6 @@ Hello -> World
 ## How to run this plugin locally
 
 -   Clone this repo.
--   `npm i` or `yarn` to install dependencies
--   `npm run dev` to start compilation in watch mode.
+-   run `yarn` to install dependencies
+-   `yarn run dev` to start compilation in watch mode.
 -   Copy over `main.js`, `styles.css`, `manifest.json` to your vault `[VaultFolder]/.obsidian/plugins/d2/`.
