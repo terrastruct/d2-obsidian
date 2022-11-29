@@ -1,4 +1,6 @@
 import { MarkdownPostProcessorContext } from "obsidian";
+import { v4 as uuidv4 } from "uuid";
+import { Buffer } from "buffer";
 import { exec } from "child_process";
 import debounce from "lodash.debounce";
 
@@ -6,31 +8,42 @@ import D2Plugin from "./main";
 
 export class D2Processor {
 	plugin: D2Plugin;
-	debouncedExport: (source: string, el: HTMLElement) => Promise<void>;
+	debouncedMap: Map<
+		string,
+		(source: string, el: HTMLElement) => Promise<void>
+	>;
 	prevImage: string;
 
 	constructor(plugin: D2Plugin) {
 		this.plugin = plugin;
-		this.debouncedExport = debounce(this.export, plugin.settings.debounce, {
-			leading: true,
-			trailing: true,
-		});
+		this.debouncedMap = new Map();
 	}
 
 	attemptExport = async (
 		source: string,
 		el: HTMLElement,
-		_: MarkdownPostProcessorContext
+		ctx: MarkdownPostProcessorContext
 	) => {
 		el.createEl("h6", {
 			text: "Generating D2 diagram...",
 			cls: "D2__Loading",
 		});
-		this.debouncedExport(source, el);
+		let debouncedFunc = this.debouncedMap.get(ctx.docId);
+		if (!debouncedFunc) {
+			debouncedFunc = debounce(
+				this.export,
+				this.plugin.settings.debounce,
+				{
+					leading: true,
+					trailing: true,
+				}
+			);
+			this.debouncedMap.set(ctx.docId, debouncedFunc);
+		}
+		await debouncedFunc?.(source, el);
 	};
 
 	insertImage(image: string, el: HTMLElement) {
-		this.prevImage = image;
 		const parser = new DOMParser();
 		const svg = parser.parseFromString(image, "image/svg+xml");
 
@@ -39,7 +52,11 @@ export class D2Processor {
 		svgEl.setAttribute("preserveAspectRatio", "xMinYMin slice");
 		svgEl.removeAttribute("width");
 		svgEl.removeAttribute("height");
-		el.insertAdjacentHTML("beforeend", svg.documentElement.outerHTML);
+		const img = document.createElement("img");
+		img.src =
+			"data:image/svg+xml;base64," +
+			Buffer.from(svg.documentElement.outerHTML).toString("base64");
+		el.appendChild(img);
 	}
 
 	export = async (source: string, el: HTMLElement) => {
@@ -47,6 +64,7 @@ export class D2Processor {
 			const image = await this.generatePreview(source);
 			if (image) {
 				el.empty();
+				this.prevImage = image;
 				this.insertImage(image, el);
 			}
 		} catch (err) {
