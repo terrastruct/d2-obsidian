@@ -1,20 +1,20 @@
-import { debounce, Debouncer, MarkdownPostProcessorContext } from "obsidian";
+import { MarkdownPostProcessorContext } from "obsidian";
 import { exec } from "child_process";
+import debounce from "lodash.debounce";
 
 import D2Plugin from "./main";
 
 export class D2Processor {
 	plugin: D2Plugin;
-	debouncedExport?: Debouncer<[string, HTMLElement], Promise<void>>;
+	debouncedExport: (source: string, el: HTMLElement) => Promise<void>;
 	prevImage: string;
 
 	constructor(plugin: D2Plugin) {
 		this.plugin = plugin;
-		this.debouncedExport = debounce(
-			this.export,
-			plugin.settings.debounce,
-			true
-		);
+		this.debouncedExport = debounce(this.export, plugin.settings.debounce, {
+			leading: true,
+			trailing: true,
+		});
 	}
 
 	debounceExport = async (
@@ -26,10 +26,10 @@ export class D2Processor {
 			text: "Generating D2 diagram...",
 			cls: "D2__Loading",
 		});
-		this.debouncedExport?.(source, el);
+		this.debouncedExport(source, el);
 	};
 
-	insertImage(el: HTMLElement, image: string) {
+	insertImage(image: string, el: HTMLElement) {
 		this.prevImage = image;
 		const parser = new DOMParser();
 		const svg = parser.parseFromString(image, "image/svg+xml");
@@ -47,7 +47,7 @@ export class D2Processor {
 			const image = await this.generatePreview(source);
 			if (image) {
 				el.empty();
-				this.insertImage(el, image);
+				this.insertImage(image, el);
 			}
 		} catch (err) {
 			el.empty();
@@ -62,7 +62,7 @@ export class D2Processor {
 				text: err.message,
 			});
 			if (this.prevImage) {
-				this.insertImage(el, this.prevImage);
+				this.insertImage(this.prevImage, el);
 			}
 		}
 	};
