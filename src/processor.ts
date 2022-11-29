@@ -5,13 +5,16 @@ import D2Plugin from "./main";
 
 export class D2Processor {
 	plugin: D2Plugin;
-	debounceTime: number;
-	debouncer?: Debouncer<[string, HTMLElement], Promise<void>>;
+	debouncedExport?: Debouncer<[string, HTMLElement], Promise<void>>;
 	prevImage: string;
 
 	constructor(plugin: D2Plugin) {
 		this.plugin = plugin;
-		this.debounceTime = plugin.settings.debounce;
+		this.debouncedExport = debounce(
+			this.export,
+			plugin.settings.debounce,
+			true
+		);
 	}
 
 	debounceExport = async (
@@ -23,12 +26,7 @@ export class D2Processor {
 			text: "Generating D2 diagram...",
 			cls: "D2__Loading",
 		});
-		if (this.debouncer) {
-			await this.debouncer(source, el);
-		} else {
-			this.debouncer = debounce(this.export, this.debounceTime, true);
-			await this.export(source, el);
-		}
+		this.debouncedExport?.(source, el);
 	};
 
 	insertImage(el: HTMLElement, image: string) {
@@ -67,7 +65,6 @@ export class D2Processor {
 				this.insertImage(el, this.prevImage);
 			}
 		}
-		this.debouncer = undefined;
 	};
 
 	async generatePreview(source: string): Promise<string> {
