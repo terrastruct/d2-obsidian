@@ -15,9 +15,9 @@ In the future, we will release a version of this Plugin that allows the user to 
 ### Configuring the Plugin
 
 -   `Layout engine`: Layout engines we support include `dagre`, `ELK`, and `TALA` (`TALA` must be installed separately from D2. For more information on how to install TALA, click [here](https://github.com/terrastruct/tala))
--   `API token`: To use TALA, copy your Terrastruct API token here or in `~/.local/state/tstruct/auth.json` under the field `api_token`. The API Token is located in your Terrastruct console.
+-   `API token`: To use TALA, copy your Terrastruct API token here or in `~/.local/state/tstruct/auth.json` under the field `api_token`. You can generate an API Token in your Terrastruct console.
 -   `Theme ID`: For a list of available themes, click [here](https://github.com/terrastruct/d2/tree/master/d2themes)
--   `Debounce`: How often you want the diagram to refresh in second(s)
+-   `Debounce`: How often you want the diagram to refresh in miliseconds (min 100)
 
 ## Using the Plugin
 
