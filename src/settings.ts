@@ -98,7 +98,6 @@ export class D2SettingsTab extends PluginSettingTab {
 					.setPlaceholder(String(DEFAULT_SETTINGS.debounce))
 					.setValue(String(this.plugin.settings.debounce))
 					.onChange(async (value) => {
-						//make sure that there is always some value defined, or reset to default
 						if (isNaN(Number(value))) {
 							new Notice("Please specify a valid number");
 							this.plugin.settings.debounce = Number(
