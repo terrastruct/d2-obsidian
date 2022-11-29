@@ -1,5 +1,4 @@
 import { MarkdownPostProcessorContext } from "obsidian";
-import { v4 as uuidv4 } from "uuid";
 import { Buffer } from "buffer";
 import { exec } from "child_process";
 import debounce from "lodash.debounce";
