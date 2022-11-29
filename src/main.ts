@@ -12,7 +12,7 @@ export default class D2Plugin extends Plugin {
 		this.addSettingTab(new D2SettingsTab(this.app, this));
 
 		const processor = new D2Processor(this);
-		this.registerMarkdownCodeBlockProcessor("d2", processor.debounceExport);
+		this.registerMarkdownCodeBlockProcessor("d2", processor.attemptExport);
 	}
 
 	onunload() {}

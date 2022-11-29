@@ -17,7 +17,7 @@ export class D2Processor {
 		});
 	}
 
-	debounceExport = async (
+	attemptExport = async (
 		source: string,
 		el: HTMLElement,
 		_: MarkdownPostProcessorContext
