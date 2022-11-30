@@ -5,6 +5,7 @@ import { D2Processor } from "./processor";
 
 export default class D2Plugin extends Plugin {
 	settings: D2PluginSettings;
+	processor: D2Processor;
 
 	async onload() {
 		await this.loadSettings();
@@ -12,9 +13,16 @@ export default class D2Plugin extends Plugin {
 
 		const processor = new D2Processor(this);
 		this.registerMarkdownCodeBlockProcessor("d2", processor.attemptExport);
+
+		this.processor = processor;
 	}
 
-	onunload() {}
+	onunload() {
+		const abortControllers = this.processor.abortControllerMap.values();
+		Array.from(abortControllers).forEach((controller) => {
+			controller.abort();
+		});
+	}
 
 	async loadSettings() {
 		this.settings = Object.assign(
