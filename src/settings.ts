@@ -26,9 +26,7 @@ export class D2SettingsTab extends PluginSettingTab {
 
 	display(): void {
 		const { containerEl } = this;
-
 		containerEl.empty();
-
 		containerEl.createEl("h2", { text: "D2 Plugin settings" });
 
 		new Setting(containerEl)
