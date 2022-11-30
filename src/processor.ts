@@ -11,14 +11,18 @@ export class D2Processor {
 		(
 			source: string,
 			el: HTMLElement,
-			ctx: MarkdownPostProcessorContext
+			ctx: MarkdownPostProcessorContext,
+			signal: AbortSignal
 		) => Promise<void>
 	>;
+	abortControllerMap: Map<string, AbortController>;
 	prevImage: string;
+	abortController: AbortController;
 
 	constructor(plugin: D2Plugin) {
 		this.plugin = plugin;
 		this.debouncedMap = new Map();
+		this.abortControllerMap = new Map();
 	}
 
 	attemptExport = async (
@@ -37,12 +41,16 @@ export class D2Processor {
 				this.plugin.settings.debounce,
 				{
 					leading: true,
-					trailing: true,
 				}
 			);
 			this.debouncedMap.set(ctx.docId, debouncedFunc);
 		}
-		await debouncedFunc?.(source, el, ctx);
+
+		this.abortControllerMap.get(ctx.docId)?.abort();
+		const newAbortController = new AbortController();
+		this.abortControllerMap.set(ctx.docId, newAbortController);
+
+		await debouncedFunc(source, el, ctx, newAbortController.signal);
 	};
 
 	sanitizeSVGIDs = (svgEl: HTMLElement, docID: string): string => {
@@ -86,10 +94,11 @@ export class D2Processor {
 	export = async (
 		source: string,
 		el: HTMLElement,
-		ctx: MarkdownPostProcessorContext
+		ctx: MarkdownPostProcessorContext,
+		signal: AbortSignal
 	) => {
 		try {
-			const image = await this.generatePreview(source);
+			const image = await this.generatePreview(source, signal);
 			if (image) {
 				el.empty();
 				this.prevImage = image;
@@ -113,7 +122,10 @@ export class D2Processor {
 		}
 	};
 
-	async generatePreview(source: string): Promise<string> {
+	async generatePreview(
+		source: string,
+		signal: AbortSignal
+	): Promise<string> {
 		const options: any = {
 			encoding: "utf-8",
 			env: {
@@ -124,6 +136,7 @@ export class D2Processor {
 					"/opt/homebrew/bin",
 				].join(":"),
 			},
+			signal,
 		};
 
 		if (this.plugin.settings.apiToken) {
