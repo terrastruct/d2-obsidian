@@ -1,5 +1,4 @@
 import { MarkdownPostProcessorContext } from "obsidian";
-import { Buffer } from "buffer";
 import { exec } from "child_process";
 import debounce from "lodash.debounce";
 
@@ -9,7 +8,11 @@ export class D2Processor {
 	plugin: D2Plugin;
 	debouncedMap: Map<
 		string,
-		(source: string, el: HTMLElement) => Promise<void>
+		(
+			source: string,
+			el: HTMLElement,
+			ctx: MarkdownPostProcessorContext
+		) => Promise<void>
 	>;
 	prevImage: string;
 
@@ -39,32 +42,53 @@ export class D2Processor {
 			);
 			this.debouncedMap.set(ctx.docId, debouncedFunc);
 		}
-		await debouncedFunc?.(source, el);
+		await debouncedFunc?.(source, el, ctx);
 	};
 
-	insertImage(image: string, el: HTMLElement) {
+	insertImage(
+		image: string,
+		el: HTMLElement,
+		ctx: MarkdownPostProcessorContext
+	) {
 		const parser = new DOMParser();
 		const svg = parser.parseFromString(image, "image/svg+xml");
-
 		const svgEl = svg.documentElement;
+
 		// Have svg image be contained within the obsidian window
 		svgEl.setAttribute("preserveAspectRatio", "xMinYMin slice");
 		svgEl.removeAttribute("width");
 		svgEl.removeAttribute("height");
-		const img = document.createElement("img");
-		img.src =
-			"data:image/svg+xml;base64," +
-			Buffer.from(svg.documentElement.outerHTML).toString("base64");
-		el.appendChild(img);
+
+		// append docId to <marker> id's so that they're unique across different panels & edit/view mode
+		const markers = svgEl.querySelectorAll("marker");
+		const markerIDs: string[] = [];
+		markers.forEach((marker) => {
+			const id = marker.getAttribute("id");
+			if (id) {
+				markerIDs.push(id);
+			}
+		});
+		const html = markerIDs.reduce((svgHTML, markerID) => {
+			return svgHTML.replaceAll(
+				markerID,
+				[markerID, ctx.docId].join("-")
+			);
+		}, svgEl.outerHTML);
+
+		el.insertAdjacentHTML("beforeend", html);
 	}
 
-	export = async (source: string, el: HTMLElement) => {
+	export = async (
+		source: string,
+		el: HTMLElement,
+		ctx: MarkdownPostProcessorContext
+	) => {
 		try {
 			const image = await this.generatePreview(source);
 			if (image) {
 				el.empty();
 				this.prevImage = image;
-				this.insertImage(image, el);
+				this.insertImage(image, el, ctx);
 			}
 		} catch (err) {
 			el.empty();
@@ -79,7 +103,7 @@ export class D2Processor {
 				text: err.message,
 			});
 			if (this.prevImage) {
-				this.insertImage(this.prevImage, el);
+				this.insertImage(this.prevImage, el, ctx);
 			}
 		}
 	};

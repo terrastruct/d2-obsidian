@@ -5,7 +5,6 @@ import { D2Processor } from "./processor";
 
 export default class D2Plugin extends Plugin {
 	settings: D2PluginSettings;
-	observer: MutationObserver;
 
 	async onload() {
 		await this.loadSettings();
