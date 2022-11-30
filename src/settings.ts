@@ -2,6 +2,21 @@ import { Notice, App, PluginSettingTab, Setting } from "obsidian";
 
 import D2Plugin from "./main";
 
+const LAYOUT_ENGINES = {
+	DAGRE: {
+		value: "dagre",
+		label: "dagre",
+	},
+	ELK: {
+		value: "elk",
+		label: "ELK",
+	},
+	TALA: {
+		value: "tala",
+		label: "TALA",
+	},
+};
+
 export interface D2PluginSettings {
 	layoutEngine: string;
 	apiToken: string;
@@ -18,35 +33,19 @@ export const DEFAULT_SETTINGS: D2PluginSettings = {
 
 export class D2SettingsTab extends PluginSettingTab {
 	plugin: D2Plugin;
+	talaSettings: HTMLDivElement;
 
 	constructor(app: App, plugin: D2Plugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
 
-	display(): void {
-		const { containerEl } = this;
-		containerEl.empty();
-		containerEl.createEl("h2", { text: "D2 Plugin settings" });
-
-		new Setting(containerEl)
-			.setName("Layout engine")
-			.setDesc(
-				'Available layout engines include "dagre", "ELK", and "TALA" (TALA must be installed separately from D2)'
-			)
-			.addDropdown((dropdown) => {
-				dropdown
-					.addOption("dagre", "dagre")
-					.addOption("elk", "ELK")
-					.addOption("tala", "TALA")
-					.setValue(this.plugin.settings.layoutEngine)
-					.onChange(async (value) => {
-						this.plugin.settings.layoutEngine = value;
-						await this.plugin.saveSettings();
-					});
-			});
-
-		new Setting(containerEl)
+	addTALASettings() {
+		const talaSettings = this.containerEl.createEl("div");
+		talaSettings.createEl("h3", {
+			text: "TALA settings",
+		});
+		new Setting(talaSettings)
 			.setName("API token")
 			.setDesc(
 				'To use TALA, copy your API token here or in ~/.local/state/tstruct/auth.json under the field "api_token"'
@@ -55,6 +54,7 @@ export class D2SettingsTab extends PluginSettingTab {
 				text
 					.setPlaceholder("tstruct_...")
 					.setValue(this.plugin.settings.apiToken)
+					.setDisabled(this.plugin.settings.layoutEngine !== "tala")
 					.onChange(async (value) => {
 						if (value && !value.startsWith("tstruct_")) {
 							new Notice("Invalid API token");
@@ -64,6 +64,45 @@ export class D2SettingsTab extends PluginSettingTab {
 						}
 					})
 			);
+
+		this.talaSettings = talaSettings;
+	}
+
+	display(): void {
+		const { containerEl } = this;
+		containerEl.empty();
+		containerEl.createEl("h1", { text: "D2 plugin settings" });
+
+		new Setting(containerEl)
+			.setName("Layout engine")
+			.setDesc(
+				'Available layout engines include "dagre", "ELK", and "TALA" (TALA must be installed separately from D2)'
+			)
+			.addDropdown((dropdown) => {
+				dropdown
+					.addOption(
+						LAYOUT_ENGINES.DAGRE.value,
+						LAYOUT_ENGINES.DAGRE.label
+					)
+					.addOption(
+						LAYOUT_ENGINES.ELK.value,
+						LAYOUT_ENGINES.ELK.label
+					)
+					.addOption(
+						LAYOUT_ENGINES.TALA.value,
+						LAYOUT_ENGINES.TALA.label
+					)
+					.setValue(this.plugin.settings.layoutEngine)
+					.onChange(async (value) => {
+						this.plugin.settings.layoutEngine = value;
+						await this.plugin.saveSettings();
+						if (value === LAYOUT_ENGINES.TALA.value) {
+							this.addTALASettings();
+						} else {
+							this.talaSettings?.remove();
+						}
+					});
+			});
 
 		new Setting(containerEl)
 			.setName("Theme ID")
@@ -116,5 +155,9 @@ export class D2SettingsTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					})
 			);
+
+		if (this.plugin.settings.layoutEngine === LAYOUT_ENGINES.TALA.value) {
+			this.addTALASettings();
+		}
 	}
 }
