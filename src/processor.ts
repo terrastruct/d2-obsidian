@@ -45,6 +45,24 @@ export class D2Processor {
 		await debouncedFunc?.(source, el, ctx);
 	};
 
+	sanitizeSVGIDs = (svgEl: HTMLElement, docID: string): string => {
+		// append docId to <marker> || <mask> || <filter> id's so that they're unique across different panels & edit/view mode
+		const overrides = svgEl.querySelectorAll("marker, mask, filter");
+		const overrideIDs: string[] = [];
+		overrides.forEach((override) => {
+			const id = override.getAttribute("id");
+			if (id) {
+				overrideIDs.push(id);
+			}
+		});
+		return overrideIDs.reduce((svgHTML, overrideID) => {
+			return svgHTML.replaceAll(
+				overrideID,
+				[overrideID, docID].join("-")
+			);
+		}, svgEl.outerHTML);
+	};
+
 	insertImage(
 		image: string,
 		el: HTMLElement,
@@ -59,23 +77,10 @@ export class D2Processor {
 		svgEl.removeAttribute("width");
 		svgEl.removeAttribute("height");
 
-		// append docId to <marker> id's so that they're unique across different panels & edit/view mode
-		const markers = svgEl.querySelectorAll("marker");
-		const markerIDs: string[] = [];
-		markers.forEach((marker) => {
-			const id = marker.getAttribute("id");
-			if (id) {
-				markerIDs.push(id);
-			}
-		});
-		const html = markerIDs.reduce((svgHTML, markerID) => {
-			return svgHTML.replaceAll(
-				markerID,
-				[markerID, ctx.docId].join("-")
-			);
-		}, svgEl.outerHTML);
-
-		el.insertAdjacentHTML("beforeend", html);
+		el.insertAdjacentHTML(
+			"beforeend",
+			this.sanitizeSVGIDs(svgEl, ctx.docId)
+		);
 	}
 
 	export = async (
