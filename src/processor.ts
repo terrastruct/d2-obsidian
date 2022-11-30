@@ -52,6 +52,17 @@ export class D2Processor {
 		this.abortControllerMap.set(ctx.docId, newAbortController);
 
 		await debouncedFunc(source, el, ctx, newAbortController.signal);
+
+		const recompileButton = el.createEl("button", {
+			text: "Recompile",
+			cls: "Preview__Recompile",
+		});
+		recompileButton.onclick = (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			el.empty();
+			this.attemptExport(source, el, ctx);
+		};
 	};
 
 	sanitizeSVGIDs = (svgEl: HTMLElement, docID: string): string => {
