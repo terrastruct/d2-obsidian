@@ -49,7 +49,7 @@ export class D2SettingsTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("API token")
 			.setDesc(
-				'To use TALA, copy your Terrastruct API token here or in ~/.local/state/tstruct/auth.json under the field "api_token"'
+				'To use TALA, copy your API token here or in ~/.local/state/tstruct/auth.json under the field "api_token"'
 			)
 			.addText((text) =>
 				text

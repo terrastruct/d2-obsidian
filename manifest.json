@@ -3,7 +3,7 @@
 	"name": "D2",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Render D2 Diagrams",
+	"description": "Render D2 diagrams",
 	"author": "Terrastruct",
 	"authorUrl": "https://github.com/terrastruct",
 	"isDesktopOnly": true
