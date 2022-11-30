@@ -1,21 +1,7 @@
 import { Notice, App, PluginSettingTab, Setting } from "obsidian";
 
 import D2Plugin from "./main";
-
-const LAYOUT_ENGINES = {
-	DAGRE: {
-		value: "dagre",
-		label: "dagre",
-	},
-	ELK: {
-		value: "elk",
-		label: "ELK",
-	},
-	TALA: {
-		value: "tala",
-		label: "TALA",
-	},
-};
+import { LAYOUT_ENGINES } from "./constants";
 
 export interface D2PluginSettings {
 	layoutEngine: string;
