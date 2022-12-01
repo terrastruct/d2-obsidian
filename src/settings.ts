@@ -40,7 +40,10 @@ export class D2SettingsTab extends PluginSettingTab {
 				text
 					.setPlaceholder("tstruct_...")
 					.setValue(this.plugin.settings.apiToken)
-					.setDisabled(this.plugin.settings.layoutEngine !== "tala")
+					.setDisabled(
+						this.plugin.settings.layoutEngine !==
+							LAYOUT_ENGINES.TALA.value
+					)
 					.onChange(async (value) => {
 						if (value && !value.startsWith("tstruct_")) {
 							new Notice("Invalid API token");
