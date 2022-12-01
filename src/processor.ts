@@ -1,5 +1,5 @@
 import { MarkdownPostProcessorContext, ButtonComponent } from "obsidian";
-import { exec } from "child_process";
+import { exec, execSync } from "child_process";
 import debounce from "lodash.debounce";
 
 import D2Plugin from "./main";
@@ -140,18 +140,20 @@ export class D2Processor {
 		source: string,
 		signal: AbortSignal
 	): Promise<string> {
-		const options: any = {
+		const GOPATH = execSync("go env GOPATH", {
 			env: {
 				...process.env,
-				PATH: [
-					process.env.PATH,
-					`${process.env.HOME}/go/bin`,
-					"/opt/homebrew/bin",
-				].join(":"),
+				PATH: ["/opt/homebrew/bin"].join(":"),
+			},
+		}).toString();
+
+		const options: any = {
+			...process.env,
+			env: {
+				PATH: `${GOPATH.replace("\n", "")}/bin`,
 			},
 			signal,
 		};
-
 		if (this.plugin.settings.apiToken) {
 			options.env.TSTRUCT_TOKEN = this.plugin.settings.apiToken;
 		}
