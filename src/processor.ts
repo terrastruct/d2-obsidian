@@ -158,11 +158,17 @@ export class D2Processor {
 			options.env.TSTRUCT_TOKEN = this.plugin.settings.apiToken;
 		}
 
-		let args = [`d2`, "-", "-", "--theme", this.plugin.settings.theme];
+		let args = [
+			`d2`,
+			"-",
+			"-",
+			`--theme=${this.plugin.settings.theme}`,
+			"--bundle=false",
+		];
 		if (this.plugin.settings.layoutEngine === LAYOUT_ENGINES.TALA.value) {
 			args.unshift("D2_LAYOUT=tala");
 		} else {
-			args = args.concat(["--layout", this.plugin.settings.layoutEngine]);
+			args.push(`--layout=${this.plugin.settings.layoutEngine}`);
 		}
 		const cmd = args.join(" ");
 		const child = exec(cmd, options);
