@@ -1,4 +1,4 @@
-import { MarkdownPostProcessorContext } from "obsidian";
+import { MarkdownPostProcessorContext, ButtonComponent } from "obsidian";
 import { exec } from "child_process";
 import debounce from "lodash.debounce";
 
@@ -53,16 +53,19 @@ export class D2Processor {
 
 		await debouncedFunc(source, el, ctx, newAbortController.signal);
 
-		const recompileButton = el.createEl("button", {
+		const button = new ButtonComponent(el)
+			.setClass("Preview__Recompile")
+			.setIcon("recompile")
+			.onClick((e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				el.empty();
+				this.attemptExport(source, el, ctx);
+			});
+
+		button.buttonEl.createEl("span", {
 			text: "Recompile",
-			cls: "Preview__Recompile",
 		});
-		recompileButton.onclick = (e) => {
-			e.preventDefault();
-			e.stopPropagation();
-			el.empty();
-			this.attemptExport(source, el, ctx);
-		};
 	};
 
 	sanitizeSVGIDs = (svgEl: HTMLElement, docID: string): string => {
