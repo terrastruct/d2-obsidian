@@ -52,20 +52,6 @@ export class D2Processor {
 		this.abortControllerMap.set(ctx.docId, newAbortController);
 
 		await debouncedFunc(source, el, ctx, newAbortController.signal);
-
-		const button = new ButtonComponent(el)
-			.setClass("Preview__Recompile")
-			.setIcon("recompile")
-			.onClick((e) => {
-				e.preventDefault();
-				e.stopPropagation();
-				el.empty();
-				this.attemptExport(source, el, ctx);
-			});
-
-		button.buttonEl.createEl("span", {
-			text: "Recompile",
-		});
 	};
 
 	sanitizeSVGIDs = (svgEl: HTMLElement, docID: string): string => {
@@ -118,6 +104,20 @@ export class D2Processor {
 				el.empty();
 				this.prevImage = image;
 				this.insertImage(image, el, ctx);
+
+				const button = new ButtonComponent(el)
+					.setClass("Preview__Recompile")
+					.setIcon("recompile")
+					.onClick((e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						el.empty();
+						this.attemptExport(source, el, ctx);
+					});
+
+				button.buttonEl.createEl("span", {
+					text: "Recompile",
+				});
 			}
 		} catch (err) {
 			el.empty();
