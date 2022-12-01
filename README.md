@@ -1,3 +1,5 @@
+<img src="./assets/banner.png" alt="D2" />
+
 # D2 Support for Obsidian
 
 ## Installation
