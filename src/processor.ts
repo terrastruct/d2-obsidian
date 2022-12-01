@@ -140,27 +140,26 @@ export class D2Processor {
 		source: string,
 		signal: AbortSignal
 	): Promise<string> {
-		const defaultPathArray = [process.env.PATH, "/opt/homebrew/bin"];
+		const pathArray = [process.env.PATH, "/opt/homebrew/bin"];
 		let GOPATH = "";
 		try {
 			GOPATH = execSync("go env GOPATH", {
 				env: {
 					...process.env,
-					PATH: defaultPathArray.join(":"),
+					PATH: pathArray.join(":"),
 				},
 			}).toString();
 		} catch (error) {
 			// ignore if go is not installed
 		}
 
-		const d2PathArray = defaultPathArray;
 		if (GOPATH) {
-			d2PathArray.push(`${GOPATH.replace("\n", "")}/bin`);
+			pathArray.push(`${GOPATH.replace("\n", "")}/bin`);
 		}
 		const options: any = {
 			...process.env,
 			env: {
-				PATH: d2PathArray.join(":"),
+				PATH: pathArray.join(":"),
 			},
 			signal,
 		};
