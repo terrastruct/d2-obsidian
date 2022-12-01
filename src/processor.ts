@@ -149,8 +149,8 @@ export class D2Processor {
 					PATH: defaultPathArray.join(":"),
 				},
 			}).toString();
-		} catch (err) {
-			throw new Error("Go is not installed");
+		} catch (error) {
+			// ignore if go is not installed
 		}
 
 		const d2PathArray = defaultPathArray;
