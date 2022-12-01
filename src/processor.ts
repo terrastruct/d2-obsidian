@@ -3,7 +3,6 @@ import { exec } from "child_process";
 import debounce from "lodash.debounce";
 
 import D2Plugin from "./main";
-import { LAYOUT_ENGINES } from "./constants";
 
 export class D2Processor {
 	plugin: D2Plugin;
@@ -142,7 +141,6 @@ export class D2Processor {
 		signal: AbortSignal
 	): Promise<string> {
 		const options: any = {
-			encoding: "utf-8",
 			env: {
 				...process.env,
 				PATH: [
@@ -161,15 +159,10 @@ export class D2Processor {
 		let args = [
 			`d2`,
 			"-",
-			"-",
 			`--theme=${this.plugin.settings.theme}`,
+			`--layout=${this.plugin.settings.layoutEngine}`,
 			"--bundle=false",
 		];
-		if (this.plugin.settings.layoutEngine === LAYOUT_ENGINES.TALA.value) {
-			args.unshift("D2_LAYOUT=tala");
-		} else {
-			args.push(`--layout=${this.plugin.settings.layoutEngine}`);
-		}
 		const cmd = args.join(" ");
 		const child = exec(cmd, options);
 		child.stdin?.write(source);
