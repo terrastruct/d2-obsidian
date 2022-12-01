@@ -1,6 +1,16 @@
-<img src="./assets/banner.png" alt="D2" />
+<div align="center">
+  <img src="./docs/assets/banner.png" alt="D2" />
+  <h2>
+    D2 Support for Obsidian
+  </h2>
 
-# D2 Support for Obsidian
+[Language docs](https://d2lang.com) | [Cheat sheet](./docs/assets/cheat_sheet.pdf)
+
+[![discord](https://img.shields.io/discord/1039184639652265985?label=discord)](https://discord.gg/NF6X8K4eDq)
+[![twitter](https://img.shields.io/twitter/follow/terrastruct?style=social)](https://twitter.com/terrastruct)
+[![license](https://img.shields.io/github/license/terrastruct/d2?color=9cf)](./LICENSE.txt)
+
+</div>
 
 ## Installation
 
