@@ -12,6 +12,8 @@ for D2, as well as install instructions and all other information, can be found 
 [![license](https://img.shields.io/github/license/terrastruct/d2-obsidian?color=9cf)](./LICENSE.txt)
 [![discord](https://img.shields.io/discord/1039184639652265985?label=discord)](https://discord.gg/NF6X8K4eDq)
 
+https://user-images.githubusercontent.com/6413609/205368550-3f02703b-2edf-4627-a97f-0a420ddf991c.mp4
+
 </div>
 
 ## Installation
@@ -24,13 +26,13 @@ this plugin calls your local installation of D2.
 
 ## Configurations
 
--   `Layout engine`: D2 supports multiple layout engines, which can significantly affect the look of your diagram.
--   `Theme ID`: For a list of available themes, visit the [D2 repository](https://github.com/terrastruct/d2/tree/master/d2themes).
--   `Debounce`: Number of milliseconds to wait after a change has made to refresh the
-    diagram (min 100).
--   `Path`: Customize the path to `d2` (optional). We check common places D2 might be
-    installed, along with your system path. However, your OS or setup may require you to
-    input your path to `d2` manually.
+- `Layout engine`: D2 supports multiple layout engines, which can significantly affect the look of your diagram.
+- `Theme ID`: For a list of available themes, visit the [D2 repository](https://github.com/terrastruct/d2/tree/master/d2themes).
+- `Debounce`: Number of milliseconds to wait after a change has made to refresh the
+  diagram (min 100).
+- `Path`: Customize the path to `d2` (optional). We check common places D2 might be
+  installed, along with your system path. However, your OS or setup may require you to
+  input your path to `d2` manually.
 
 ## Usage
 
@@ -42,10 +44,10 @@ Hello -> World
 
 ## How to run this plugin locally
 
--   Clone this repo.
--   Run `yarn` to install dependencies.
--   Run `yarn run dev` to start compilation in watch mode.
--   Copy over `main.js`, `styles.css`, `manifest.json` to your vault `[VaultFolder]/.obsidian/plugins/d2/`.
+- Clone this repo.
+- Run `yarn` to install dependencies.
+- Run `yarn run dev` to start compilation in watch mode.
+- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `[VaultFolder]/.obsidian/plugins/d2/`.
 
 ## FAQ
 
