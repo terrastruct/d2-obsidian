@@ -8,6 +8,7 @@ export interface D2PluginSettings {
 	apiToken: string;
 	debounce: number;
 	theme: number;
+	d2Path: string;
 }
 
 export const DEFAULT_SETTINGS: D2PluginSettings = {
@@ -15,6 +16,7 @@ export const DEFAULT_SETTINGS: D2PluginSettings = {
 	debounce: 500,
 	theme: 0,
 	apiToken: "",
+	d2Path: "",
 };
 
 export class D2SettingsTab extends PluginSettingTab {
@@ -144,6 +146,18 @@ export class D2SettingsTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					})
 			);
+
+		new Setting(containerEl)
+			.setName("D2 PATH (optional)")
+			.setDesc("Customize the PATH to D2")
+			.addText((text) => {
+				text.setValue(this.plugin.settings.d2Path).onChange(
+					async (value) => {
+						this.plugin.settings.d2Path = value;
+						await this.plugin.saveSettings();
+					}
+				);
+			});
 
 		if (this.plugin.settings.layoutEngine === LAYOUT_ENGINES.TALA.value) {
 			this.addTALASettings();

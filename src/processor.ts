@@ -156,6 +156,9 @@ export class D2Processor {
 		if (GOPATH) {
 			pathArray.push(`${GOPATH.replace("\n", "")}/bin`);
 		}
+		if (this.plugin.settings.d2Path) {
+			pathArray.push(this.plugin.settings.d2Path);
+		}
 		const options: any = {
 			...process.env,
 			env: {
