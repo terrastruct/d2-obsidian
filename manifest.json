@@ -1,10 +1,10 @@
 {
-	"id": "d2-obsidian",
-	"name": "D2",
-	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "Render D2 diagrams",
-	"author": "Terrastruct",
-	"authorUrl": "https://d2lang.com",
-	"isDesktopOnly": true
+  "id": "d2-obsidian",
+  "name": "D2",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "The official D2 plugin for Obsidian. D2 is a modern diagram scripting language that turns text to diagrams",
+  "author": "Terrastruct",
+  "authorUrl": "https://d2lang.com",
+  "isDesktopOnly": true
 }
