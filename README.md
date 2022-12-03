@@ -12,7 +12,7 @@ for D2, as well as install instructions and all other information, can be found 
 [![license](https://img.shields.io/github/license/terrastruct/d2-obsidian?color=9cf)](./LICENSE.txt)
 [![discord](https://img.shields.io/discord/1039184639652265985?label=discord)](https://discord.gg/NF6X8K4eDq)
 
-https://user-images.githubusercontent.com/6413609/205368550-3f02703b-2edf-4627-a97f-0a420ddf991c.mp4
+https://user-images.githubusercontent.com/6413609/205414613-5b2559f1-0645-4432-bb7b-d980de527201.mp4
 
 </div>
 
