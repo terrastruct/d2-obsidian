@@ -9,6 +9,7 @@ for D2, as well as install instructions and all other information, can be found 
 [https://github.com/terrastruct/d2](https://github.com/terrastruct/d2).
 
 [![ci](https://github.com/terrastruct/d2-obsidian/actions/workflows/ci.yml/badge.svg)](https://github.com/terrastruct/d2-obsidian/actions/workflows/ci.yml)
+[![ci](https://github.com/terrastruct/d2-obsidian/actions/workflows/daily.yml/badge.svg)](https://github.com/terrastruct/d2-obsidian/actions/workflows/daily.yml)
 [![license](https://img.shields.io/github/license/terrastruct/d2-obsidian?color=9cf)](./LICENSE.txt)
 [![discord](https://img.shields.io/discord/1039184639652265985?label=discord)](https://discord.gg/NF6X8K4eDq)
 
