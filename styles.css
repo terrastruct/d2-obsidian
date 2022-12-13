@@ -1,43 +1,43 @@
 .D2__Loading {
-	font-style: italic;
+  font-style: italic;
 }
 
 .Preview__Error--Title {
-	color: #be0b41 !important;
+  color: #be0b41 !important;
 }
 
 .Preview__Error {
-	display: flex;
-	flex-direction: column;
-	white-space: pre;
-	white-space: pre-wrap;
+  display: flex;
+  flex-direction: column;
+  white-space: pre;
+  white-space: pre-wrap;
 }
 
 .Preview__Recompile {
-	position: absolute;
-	top: 4px;
-	left: 4px;
-	height: 24px;
-	padding: 6px;
-	background-color: white !important;
-	color: #2e3346;
-	display: flex;
-	gap: 4px;
-	box-shadow: none !important;
-	border: 1px solid #dee1eb;
-	filter: drop-shadow(1px 1px 4px rgba(31, 36, 58, 0.08));
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  height: 24px;
+  padding: 6px;
+  background-color: white !important;
+  color: #2e3346;
+  display: flex;
+  gap: 4px;
+  box-shadow: none !important;
+  border: 1px solid #dee1eb;
+  filter: drop-shadow(1px 1px 4px rgba(31, 36, 58, 0.08));
 }
 
 .Preview__Recompile:hover {
-	filter: drop-shadow(2px 2px 16px rgba(31, 36, 58, 0.12));
-	cursor: pointer;
+  filter: drop-shadow(2px 2px 16px rgba(31, 36, 58, 0.12));
+  cursor: pointer;
 }
 
 .Preview__Recompile > .svg-icon {
-	height: 12px !important;
-	width: 12px !important;
+  height: 12px !important;
+  width: 12px !important;
 }
 
 .block-language-d2 {
-	position: relative;
+  position: relative;
 }
