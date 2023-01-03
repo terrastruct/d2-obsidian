@@ -124,14 +124,13 @@ export class D2Processor {
   };
 
   async generatePreview(source: string, signal: AbortSignal): Promise<string> {
-    const pathDelimiter = delimiter;
     const pathArray = [process.env.PATH, "/opt/homebrew/bin"];
     let GOPATH = "";
     try {
       GOPATH = execSync("go env GOPATH", {
         env: {
           ...process.env,
-          PATH: pathArray.join(pathDelimiter),
+          PATH: pathArray.join(delimiter),
         },
       }).toString();
     } catch (error) {
@@ -147,7 +146,7 @@ export class D2Processor {
     const options: any = {
       ...process.env,
       env: {
-        PATH: pathArray.join(pathDelimiter),
+        PATH: pathArray.join(delimiter),
       },
       signal,
     };
