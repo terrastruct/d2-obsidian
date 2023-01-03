@@ -1,5 +1,6 @@
 import { MarkdownPostProcessorContext, ButtonComponent } from "obsidian";
 import { exec, execSync } from "child_process";
+import { delimiter } from "path";
 import debounce from "lodash.debounce";
 
 import D2Plugin from "./main";
@@ -129,7 +130,7 @@ export class D2Processor {
       GOPATH = execSync("go env GOPATH", {
         env: {
           ...process.env,
-          PATH: pathArray.join(":"),
+          PATH: pathArray.join(delimiter),
         },
       }).toString();
     } catch (error) {
@@ -145,7 +146,7 @@ export class D2Processor {
     const options: any = {
       ...process.env,
       env: {
-        PATH: pathArray.join(":"),
+        PATH: pathArray.join(delimiter),
       },
       signal,
     };
