@@ -97,7 +97,7 @@ export class D2SettingsTab extends PluginSettingTab {
           .setPlaceholder("Enter a theme ID")
           .setValue(String(this.plugin.settings.theme))
           .onChange(async (value) => {
-            if (!isNaN(Number(value)) || value === undefined) {
+            if (!isNaN(Number(value)) || value === "") {
               this.plugin.settings.theme = Number(value || DEFAULT_SETTINGS.theme);
               await this.plugin.saveSettings();
             } else {
@@ -114,17 +114,16 @@ export class D2SettingsTab extends PluginSettingTab {
           .setPlaceholder(String(DEFAULT_SETTINGS.pad))
           .setValue(String(this.plugin.settings.pad))
           .onChange(async (value) => {
+            console.log(value, value === undefined);
             if (isNaN(Number(value))) {
               new Notice("Please specify a valid number");
               this.plugin.settings.pad = Number(DEFAULT_SETTINGS.pad);
-            } else if (value === undefined) {
-              this.plugin.settings.pad = Number(DEFAULT_SETTINGS.pad);
-            } else if (Number(value) < 100) {
-              new Notice("The value must be greater than 100");
+            } else if (value === "") {
               this.plugin.settings.pad = Number(DEFAULT_SETTINGS.pad);
             } else {
               this.plugin.settings.pad = Number(value);
             }
+            console.log(this.plugin.settings.pad);
             await this.plugin.saveSettings();
           })
       );
@@ -150,7 +149,7 @@ export class D2SettingsTab extends PluginSettingTab {
             if (isNaN(Number(value))) {
               new Notice("Please specify a valid number");
               this.plugin.settings.debounce = Number(DEFAULT_SETTINGS.debounce);
-            } else if (value === undefined) {
+            } else if (value === "") {
               this.plugin.settings.debounce = Number(DEFAULT_SETTINGS.debounce);
             } else if (Number(value) < 100) {
               new Notice("The value must be greater than 100");
