@@ -159,6 +159,8 @@ export class D2Processor {
       "-",
       `--theme=${this.plugin.settings.theme}`,
       `--layout=${this.plugin.settings.layoutEngine}`,
+      `--pad=${this.plugin.settings.pad}`,
+      `--sketch=${this.plugin.settings.sketch}`,
       "--bundle=false",
     ];
     const cmd = args.join(" ");
