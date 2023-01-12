@@ -114,7 +114,6 @@ export class D2SettingsTab extends PluginSettingTab {
           .setPlaceholder(String(DEFAULT_SETTINGS.pad))
           .setValue(String(this.plugin.settings.pad))
           .onChange(async (value) => {
-            console.log(value, value === undefined);
             if (isNaN(Number(value))) {
               new Notice("Please specify a valid number");
               this.plugin.settings.pad = Number(DEFAULT_SETTINGS.pad);
@@ -123,7 +122,6 @@ export class D2SettingsTab extends PluginSettingTab {
             } else {
               this.plugin.settings.pad = Number(value);
             }
-            console.log(this.plugin.settings.pad);
             await this.plugin.saveSettings();
           })
       );
