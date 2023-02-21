@@ -134,7 +134,7 @@ export class D2Processor {
         },
       }).toString();
     } catch (error) {
-      // ignore if go is not installed
+      // ignore if error
     }
     if (HOMEPATH) {
       pathArray.push(`${HOMEPATH.replace("\n", "")}/.local/bin`);
