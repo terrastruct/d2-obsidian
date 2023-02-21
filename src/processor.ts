@@ -2,6 +2,7 @@ import { MarkdownPostProcessorContext, ButtonComponent } from "obsidian";
 import { exec, execSync } from "child_process";
 import { delimiter } from "path";
 import debounce from "lodash.debounce";
+import os from "os";
 
 import D2Plugin from "./main";
 
@@ -158,6 +159,12 @@ export class D2Processor {
     if (this.plugin.settings.d2Path) {
       pathArray.push(this.plugin.settings.d2Path);
     }
+
+    // platform will be win32 even on 64 bit windows
+    if (os.platform() !== "win32") {
+      pathArray.push("C:\\Program Files\\D2");
+    }
+
     const options: any = {
       ...process.env,
       env: {
