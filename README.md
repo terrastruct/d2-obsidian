@@ -27,7 +27,7 @@ Settings > Community plugins > Browse > Search for "D2"
 - `Layout engine`: D2 supports multiple layout engines, which can significantly affect the look of your diagram.
 - `Theme ID`: For a list of available themes, visit the [D2 repository](https://github.com/terrastruct/d2/tree/master/d2themes).
 - `Debounce`: Number of milliseconds to wait after a change has made to refresh the diagram (min 100).
-- `Path`: Customize the path to `d2` (optional). We check common places D2 might be installed, along with your system path. However, your OS or setup may require you to input your path to `d2` manually. To do so, type `which d2` into your terminal, and copy everything in the path up until `/d2` and paste it into this configuration.
+- `Path`: Customize the path to `d2` (optional). We check common places D2 might be installed, along with your system path. However, your OS or setup may require you to input your path to `d2` manually. To do so, type `where d2` into your terminal, and copy everything in the path up until `/d2` and paste it into this configuration.
 
 ## Usage
 
@@ -46,6 +46,8 @@ Hello -> World
 
 ## FAQ
 
+- I have D2 installed but I'm running into `D2 Compilation Error: d2: command not found`
+  - The Obsidian plugin may not be able to locate your D2 installation. Get the path to the D2 installation by executing `where d2` in the command line, then copying that path minus the executable itself into the `Path` plugin setting (so if the path is `/usr/local/bin/d2`, then you want to copy `/usr/local/bin`).
 - I have a question or need help.
   - The best way to get help is to ask on [D2 Discord](https://discord.gg/NF6X8K4eDq).
 - I'd like to contribute.
