@@ -26,6 +26,8 @@ Settings > Community plugins > Browse > Search for "D2"
 
 - `Layout engine`: D2 supports multiple layout engines, which can significantly affect the look of your diagram.
 - `Theme ID`: For a list of available themes, visit the [D2 repository](https://github.com/terrastruct/d2/tree/master/d2themes).
+- `Pad`: Number of pixels padded around the rendered diagram.
+- `Sketch mode`: Render the diagram to look like it was sketched by hand.
 - `Debounce`: Number of milliseconds to wait after a change has made to refresh the diagram (min 100).
 - `Path`: Customize the path to `d2` (optional). We check common places D2 might be installed, along with your system path. However, your OS or setup may require you to input your path to `d2` manually. To do so, type `where d2` into your terminal, and copy everything in the path up until `/d2` and paste it into this configuration.
 
