@@ -126,19 +126,25 @@ export class D2Processor {
 
   async generatePreview(source: string, signal: AbortSignal): Promise<string> {
     const pathArray = [process.env.PATH, "/opt/homebrew/bin", "/usr/local/bin"];
+
+    // platform will be win32 even on 64 bit windows
     let HOMEPATH = "";
-    try {
-      HOMEPATH = execSync("echo $HOME", {
-        env: {
-          ...process.env,
-          PATH: pathArray.join(delimiter),
-        },
-      }).toString();
-    } catch (error) {
-      // ignore if error
-    }
-    if (HOMEPATH) {
-      pathArray.push(`${HOMEPATH.replace("\n", "")}/.local/bin`);
+    if (os.platform() === "win32") {
+      pathArray.push("C:\\Program Files\\D2");
+    } else {
+      try {
+        HOMEPATH = execSync("echo $HOME", {
+          env: {
+            ...process.env,
+            PATH: pathArray.join(delimiter),
+          },
+        }).toString();
+      } catch (error) {
+        // ignore if error
+      }
+      if (HOMEPATH) {
+        pathArray.push(`${HOMEPATH.replace("\n", "")}/.local/bin`);
+      }
     }
 
     let GOPATH = "";
@@ -158,11 +164,6 @@ export class D2Processor {
     }
     if (this.plugin.settings.d2Path) {
       pathArray.push(this.plugin.settings.d2Path);
-    }
-
-    // platform will be win32 even on 64 bit windows
-    if (os.platform() !== "win32") {
-      pathArray.push("C:\\Program Files\\D2");
     }
 
     const options: any = {
