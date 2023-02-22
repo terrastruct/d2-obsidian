@@ -49,7 +49,7 @@ Hello -> World
 ## FAQ
 
 - I have D2 installed but I'm running into `D2 Compilation Error: d2: command not found`
-  - The Obsidian plugin may not be able to locate your D2 installation. Get the path to the D2 installation by executing `where d2` in the command line, then copying that path minus the executable itself into the `Path` plugin setting (so if the path is `/usr/local/bin/d2`, then you want to copy `/usr/local/bin`).
+  - The Obsidian plugin may not be able to locate your D2 installation. Get the path to the D2 installation by executing `where d2` in the command line, then copy that path minus the executable itself into the `Path` plugin setting (so if the path is `/usr/local/bin/d2`, then you want to copy `/usr/local/bin`).
 - I have a question or need help.
   - The best way to get help is to ask on [D2 Discord](https://discord.gg/NF6X8K4eDq).
 - I'd like to contribute.
