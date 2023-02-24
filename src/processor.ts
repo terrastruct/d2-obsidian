@@ -128,23 +128,10 @@ export class D2Processor {
     const pathArray = [process.env.PATH, "/opt/homebrew/bin", "/usr/local/bin"];
 
     // platform will be win32 even on 64 bit windows
-    let HOMEPATH = "";
     if (os.platform() === "win32") {
       pathArray.push(`C:\Program Files\D2`);
     } else {
-      try {
-        HOMEPATH = execSync("echo $HOME", {
-          env: {
-            ...process.env,
-            PATH: pathArray.join(delimiter),
-          },
-        }).toString();
-      } catch (error) {
-        // ignore if error
-      }
-      if (HOMEPATH) {
-        pathArray.push(`${HOMEPATH.replace("\n", "")}/.local/bin`);
-      }
+      pathArray.push(`${process.env.HOME}/.local/bin`);
     }
 
     let GOPATH = "";
