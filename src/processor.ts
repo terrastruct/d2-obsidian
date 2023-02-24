@@ -2,6 +2,7 @@ import { MarkdownPostProcessorContext, ButtonComponent } from "obsidian";
 import { exec, execSync } from "child_process";
 import { delimiter } from "path";
 import debounce from "lodash.debounce";
+import os from "os";
 
 import D2Plugin from "./main";
 
@@ -124,7 +125,15 @@ export class D2Processor {
   };
 
   async generatePreview(source: string, signal: AbortSignal): Promise<string> {
-    const pathArray = [process.env.PATH, "/opt/homebrew/bin"];
+    const pathArray = [process.env.PATH, "/opt/homebrew/bin", "/usr/local/bin"];
+
+    // platform will be win32 even on 64 bit windows
+    if (os.platform() === "win32") {
+      pathArray.push(`C:\Program Files\D2`);
+    } else {
+      pathArray.push(`${process.env.HOME}/.local/bin`);
+    }
+
     let GOPATH = "";
     try {
       GOPATH = execSync("go env GOPATH", {
@@ -143,6 +152,7 @@ export class D2Processor {
     if (this.plugin.settings.d2Path) {
       pathArray.push(this.plugin.settings.d2Path);
     }
+
     const options: any = {
       ...process.env,
       env: {
