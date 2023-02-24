@@ -130,7 +130,7 @@ export class D2Processor {
     // platform will be win32 even on 64 bit windows
     let HOMEPATH = "";
     if (os.platform() === "win32") {
-      pathArray.push("C:\\Program Files\\D2");
+      pathArray.push(`C:\Program Files\D2`);
     } else {
       try {
         HOMEPATH = execSync("echo $HOME", {
