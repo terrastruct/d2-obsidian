@@ -69,14 +69,19 @@ export class D2Processor {
   insertImage(image: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) {
     const parser = new DOMParser();
     const svg = parser.parseFromString(image, "image/svg+xml");
+    const containerEl = el.createDiv();
+
+    containerEl.style.maxHeight = `${this.plugin.settings.containerHeight}px`;
+    containerEl.style.height = "100vh";
+    containerEl.style.width = "100%";
+    containerEl.style.position = "relative";
+
     const svgEl = svg.documentElement;
+    svgEl.style.position = "absolute";
+    svgEl.style.width = "100%";
+    svgEl.style.height = "100%";
 
-    // Have svg image be contained within the obsidian window
-    svgEl.setAttribute("preserveAspectRatio", "xMinYMin slice");
-    svgEl.removeAttribute("width");
-    svgEl.removeAttribute("height");
-
-    el.insertAdjacentHTML("beforeend", this.sanitizeSVGIDs(svgEl, ctx.docId));
+    containerEl.innerHTML = this.sanitizeSVGIDs(svgEl, ctx.docId);
   }
 
   export = async (

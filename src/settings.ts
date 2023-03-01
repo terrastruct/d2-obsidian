@@ -11,6 +11,7 @@ export interface D2PluginSettings {
   d2Path: string;
   pad: number;
   sketch: boolean;
+  containerHeight: number;
 }
 
 export const DEFAULT_SETTINGS: D2PluginSettings = {
@@ -21,6 +22,7 @@ export const DEFAULT_SETTINGS: D2PluginSettings = {
   d2Path: "",
   pad: 100,
   sketch: false,
+  containerHeight: 800,
 };
 
 export class D2SettingsTab extends PluginSettingTab {
@@ -134,6 +136,30 @@ export class D2SettingsTab extends PluginSettingTab {
           this.plugin.settings.sketch = value;
           await this.plugin.saveSettings();
         })
+      );
+
+    new Setting(containerEl)
+      .setName("Container height")
+      .setDesc("Diagram max render height in pixels")
+      .addText((text) =>
+        text
+          .setPlaceholder(String(DEFAULT_SETTINGS.containerHeight))
+          .setValue(String(this.plugin.settings.containerHeight))
+          .onChange(async (value) => {
+            if (isNaN(Number(value))) {
+              new Notice("Please specify a valid number");
+              this.plugin.settings.containerHeight = Number(
+                DEFAULT_SETTINGS.containerHeight
+              );
+            } else if (value === "") {
+              this.plugin.settings.containerHeight = Number(
+                DEFAULT_SETTINGS.containerHeight
+              );
+            } else {
+              this.plugin.settings.containerHeight = Number(value);
+            }
+            await this.plugin.saveSettings();
+          })
       );
 
     new Setting(containerEl)
