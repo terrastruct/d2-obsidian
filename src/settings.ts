@@ -140,7 +140,7 @@ export class D2SettingsTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Container height")
-      .setDesc("Diagram max render height in pixels (Requires D2 version >= 0.2.2)")
+      .setDesc("Diagram max render height in pixels (Requires d2 v0.2.2 and up)")
       .addText((text) =>
         text
           .setPlaceholder(String(DEFAULT_SETTINGS.containerHeight))
