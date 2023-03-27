@@ -65,6 +65,17 @@ export class D2Processor {
     await debouncedFunc(source, el, ctx, newAbortController.signal);
   };
 
+  formatLinks = (svgEl) => {
+    // Add attributes to <a> tags to make them Obsidian compatible :
+    const links = svgEl.querySelectorAll("a");
+    links.forEach((link) => {
+      link.classList.add("internal-link");
+      link.setAttribute("data-href", link.getAttribute("href"));
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener");
+    });
+  };
+
   sanitizeSVGIDs = (svgEl: HTMLElement, docID: string): string => {
     // append docId to <marker> || <mask> || <filter> id's so that they're unique across different panels & edit/view mode
     const overrides = svgEl.querySelectorAll("marker, mask, filter");
@@ -91,6 +102,7 @@ export class D2Processor {
     svgEl.style.height = "fit-content";
     svgEl.style.width = "fit-content";
 
+    this.formatLinks(svgEl);
     containerEl.innerHTML = this.sanitizeSVGIDs(svgEl, ctx.docId);
   }
 
