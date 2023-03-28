@@ -65,10 +65,10 @@ export class D2Processor {
     await debouncedFunc(source, el, ctx, newAbortController.signal);
   };
 
-  formatLinks = (svgEl) => {
+  formatLinks = (svgEl: HTMLElement) => {
     // Add attributes to <a> tags to make them Obsidian compatible :
     const links = svgEl.querySelectorAll("a");
-    links.forEach((link) => {
+    links.forEach((link: HTMLElement) => {
       link.classList.add("internal-link");
       link.setAttribute("data-href", link.getAttribute("href"));
       link.setAttribute("target", "_blank");
