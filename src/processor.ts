@@ -69,10 +69,14 @@ export class D2Processor {
     // Add attributes to <a> tags to make them Obsidian compatible :
     const links = svgEl.querySelectorAll("a");
     links.forEach((link: HTMLElement) => {
-      link.classList.add("internal-link");
-      link.setAttribute("data-href", link.getAttribute("href"));
-      link.setAttribute("target", "_blank");
-      link.setAttribute("rel", "noopener");
+      const href = link.getAttribute("href")??""
+      // Check for internal link
+      if (!href.match(/:\/\//g)){
+        link.classList.add("internal-link");
+        link.setAttribute("data-href", href);
+        link.setAttribute("target", "_blank");
+        link.setAttribute("rel", "noopener");
+      }
     });
   };
 
