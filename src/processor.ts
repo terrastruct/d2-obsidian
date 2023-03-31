@@ -65,13 +65,23 @@ export class D2Processor {
     await debouncedFunc(source, el, ctx, newAbortController.signal);
   };
 
+  isValidUrl = (urlString: string) => {
+    let url;
+    try {
+      url = new URL(urlString);
+    } catch (e) {
+      return false;
+    }
+    return url.protocol === "http:" || url.protocol === "https:";
+  };
+
   formatLinks = (svgEl: HTMLElement) => {
     // Add attributes to <a> tags to make them Obsidian compatible :
     const links = svgEl.querySelectorAll("a");
     links.forEach((link: HTMLElement) => {
-      const href = link.getAttribute("href")??""
+      const href = link.getAttribute("href") ?? "";
       // Check for internal link
-      if (!href.match(/:\/\//g)){
+      if (!this.isValidUrl(href)) {
         link.classList.add("internal-link");
         link.setAttribute("data-href", href);
         link.setAttribute("target", "_blank");
