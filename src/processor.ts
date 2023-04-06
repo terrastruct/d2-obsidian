@@ -40,13 +40,13 @@ export class D2Processor {
     // we need to generate a debounce per split page, and ctx.containerEl is the only element we have access to that's page specific
     // however, it is not publically available in MarkdownPostProcessorContext, so we hack its access by casting it to an 'any' type
     const pageContainer = (ctx as any).containerEl;
-    let pageContainerID = pageContainer.id;
-    if (!pageContainerID) {
-      pageContainerID = Math.floor(Math.random() * Date.now()).toString();
-      pageContainer.setAttribute("id", pageContainerID);
+    let pageID = pageContainer.dataset.pageID;
+    if (!pageID) {
+      pageID = Math.floor(Math.random() * Date.now()).toString();
+      pageContainer.dataset.pageID = pageID;
     }
 
-    let debouncedFunc = this.debouncedMap.get(pageContainerID);
+    let debouncedFunc = this.debouncedMap.get(pageID);
     if (!debouncedFunc) {
       // No need to debounce initial render
       await this.export(source, el, ctx);
@@ -54,13 +54,13 @@ export class D2Processor {
       debouncedFunc = debounce(this.export, this.plugin.settings.debounce, {
         leading: true,
       });
-      this.debouncedMap.set(pageContainerID, debouncedFunc);
+      this.debouncedMap.set(pageID, debouncedFunc);
       return;
     }
 
-    this.abortControllerMap.get(pageContainerID)?.abort();
+    this.abortControllerMap.get(pageID)?.abort();
     const newAbortController = new AbortController();
-    this.abortControllerMap.set(pageContainerID, newAbortController);
+    this.abortControllerMap.set(pageID, newAbortController);
 
     await debouncedFunc(source, el, ctx, newAbortController.signal);
   };
@@ -142,7 +142,7 @@ export class D2Processor {
       }
     } finally {
       const pageContainer = (ctx as any).containerEl;
-      this.abortControllerMap.delete(pageContainer.id);
+      this.abortControllerMap.delete(pageContainer.dataset.id);
     }
   };
 
