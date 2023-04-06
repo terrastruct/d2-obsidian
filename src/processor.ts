@@ -142,7 +142,7 @@ export class D2Processor {
       }
     } finally {
       const pageContainer = (ctx as any).containerEl;
-      this.abortControllerMap.delete(pageContainer.ID);
+      this.abortControllerMap.delete(pageContainer.id);
     }
   };
 
