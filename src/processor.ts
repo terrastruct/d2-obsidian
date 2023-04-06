@@ -14,7 +14,7 @@ export class D2Processor {
       source: string,
       el: HTMLElement,
       ctx: MarkdownPostProcessorContext,
-      signal: AbortSignal
+      signal?: AbortSignal
     ) => Promise<void>
   >;
   abortControllerMap: Map<string, AbortController>;
@@ -36,17 +36,31 @@ export class D2Processor {
       text: "Generating D2 diagram...",
       cls: "D2__Loading",
     });
-    let debouncedFunc = this.debouncedMap.get(ctx.docId);
+
+    // we need to generate a debounce per split page, and ctx.containerEl is the only element we have access to that's page specific
+    // however, it is not publically available in MarkdownPostProcessorContext, so we hack its access by casting it to an 'any' type
+    const pageContainer = (ctx as any).containerEl;
+    let pageID = pageContainer.dataset.pageID;
+    if (!pageID) {
+      pageID = Math.floor(Math.random() * Date.now()).toString();
+      pageContainer.dataset.pageID = pageID;
+    }
+
+    let debouncedFunc = this.debouncedMap.get(pageID);
     if (!debouncedFunc) {
+      // No need to debounce initial render
+      await this.export(source, el, ctx);
+
       debouncedFunc = debounce(this.export, this.plugin.settings.debounce, {
         leading: true,
       });
-      this.debouncedMap.set(ctx.docId, debouncedFunc);
+      this.debouncedMap.set(pageID, debouncedFunc);
+      return;
     }
 
-    this.abortControllerMap.get(ctx.docId)?.abort();
+    this.abortControllerMap.get(pageID)?.abort();
     const newAbortController = new AbortController();
-    this.abortControllerMap.set(ctx.docId, newAbortController);
+    this.abortControllerMap.set(pageID, newAbortController);
 
     await debouncedFunc(source, el, ctx, newAbortController.signal);
   };
@@ -88,7 +102,7 @@ export class D2Processor {
     source: string,
     el: HTMLElement,
     ctx: MarkdownPostProcessorContext,
-    signal: AbortSignal
+    signal?: AbortSignal
   ) => {
     try {
       const image = await this.generatePreview(source, signal);
@@ -126,10 +140,13 @@ export class D2Processor {
       if (this.prevImage) {
         this.insertImage(this.prevImage, el, ctx);
       }
+    } finally {
+      const pageContainer = (ctx as any).containerEl;
+      this.abortControllerMap.delete(pageContainer.dataset.id);
     }
   };
 
-  async generatePreview(source: string, signal: AbortSignal): Promise<string> {
+  async generatePreview(source: string, signal?: AbortSignal): Promise<string> {
     const pathArray = [process.env.PATH, "/opt/homebrew/bin", "/usr/local/bin"];
 
     // platform will be win32 even on 64 bit windows
