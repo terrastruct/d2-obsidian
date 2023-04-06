@@ -41,3 +41,9 @@
 .block-language-d2 {
   position: relative;
 }
+
+@media print {
+  .Preview__Recompile {
+    display: none;
+  }
+}
