@@ -85,15 +85,11 @@ export class D2Processor {
     const svg = parser.parseFromString(image, "image/svg+xml");
     const containerEl = el.createDiv();
 
-    containerEl.style.maxHeight = `${this.plugin.settings.containerHeight}px`;
-    containerEl.style.height = "100vh";
-    containerEl.style.width = "100%";
-    containerEl.style.position = "relative";
-
-    const svgEl = svg.documentElement;
-    svgEl.style.position = "absolute";
-    svgEl.style.width = "100%";
-    svgEl.style.height = "100%";
+    const svgEl = svg.firstElementChild.firstElementChild;
+    svgEl.style.maxHeight = `${this.plugin.settings.containerHeight}px`;
+    svgEl.style.maxWidth = "100%";
+    svgEl.style.height = "fit-content";
+    svgEl.style.width = "fit-content";
 
     containerEl.innerHTML = this.sanitizeSVGIDs(svgEl, ctx.docId);
   }
