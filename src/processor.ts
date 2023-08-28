@@ -85,7 +85,7 @@ export class D2Processor {
     const svg = parser.parseFromString(image, "image/svg+xml");
     const containerEl = el.createDiv();
 
-    const svgEl = svg!.firstElementChild!.firstElementChild;
+    const svgEl = svg!.firstElementChild!.firstElementChild as HTMLElement;
     svgEl.style.maxHeight = `${this.plugin.settings.containerHeight}px`;
     svgEl.style.maxWidth = "100%";
     svgEl.style.height = "fit-content";
