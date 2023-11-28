@@ -85,7 +85,7 @@ export class D2Processor {
     const svg = parser.parseFromString(image, "image/svg+xml");
     const containerEl = el.createDiv();
 
-    const svgEl = svg!.firstElementChild!.firstElementChild as HTMLElement;
+    const svgEl = svg.documentElement;
     svgEl.style.maxHeight = `${this.plugin.settings.containerHeight}px`;
     svgEl.style.maxWidth = "100%";
     svgEl.style.height = "fit-content";
@@ -190,6 +190,7 @@ export class D2Processor {
       `--pad=${this.plugin.settings.pad}`,
       `--sketch=${this.plugin.settings.sketch}`,
       "--bundle=false",
+      "--scale=1",
     ];
     const cmd = args.join(" ");
     const child = exec(cmd, options);
