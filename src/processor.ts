@@ -65,6 +65,31 @@ export class D2Processor {
     await debouncedFunc(source, el, ctx, newAbortController.signal);
   };
 
+  isValidUrl = (urlString: string) => {
+    let url;
+    try {
+      url = new URL(urlString);
+    } catch (e) {
+      return false;
+    }
+    return url.protocol === "http:" || url.protocol === "https:";
+  };
+
+  formatLinks = (svgEl: HTMLElement) => {
+    // Add attributes to <a> tags to make them Obsidian compatible :
+    const links = svgEl.querySelectorAll("a");
+    links.forEach((link: HTMLElement) => {
+      const href = link.getAttribute("href") ?? "";
+      // Check for internal link
+      if (!this.isValidUrl(href)) {
+        link.classList.add("internal-link");
+        link.setAttribute("data-href", href);
+        link.setAttribute("target", "_blank");
+        link.setAttribute("rel", "noopener");
+      }
+    });
+  };
+
   sanitizeSVGIDs = (svgEl: HTMLElement, docID: string): string => {
     // append docId to <marker> || <mask> || <filter> id's so that they're unique across different panels & edit/view mode
     const overrides = svgEl.querySelectorAll("marker, mask, filter");
@@ -91,6 +116,7 @@ export class D2Processor {
     svgEl.style.height = "fit-content";
     svgEl.style.width = "fit-content";
 
+    this.formatLinks(svgEl);
     containerEl.innerHTML = this.sanitizeSVGIDs(svgEl, ctx.docId);
   }
 
