@@ -1,6 +1,6 @@
 {
   "name": "d2-obsidian",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "This is the official D2 plugin for Obsidian.",
   "main": "main.js",
   "scripts": {
