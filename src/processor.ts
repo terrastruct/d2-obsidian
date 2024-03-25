@@ -3,7 +3,7 @@ import { exec, execSync } from "child_process";
 import { delimiter } from "path";
 import debounce from "lodash.debounce";
 import os from "os";
-import panzoom from 'panzoom';
+import panzoom from "panzoom";
 
 import D2Plugin from "./main";
 
@@ -128,7 +128,7 @@ export class D2Processor {
       beforeWheel: (e) => {
         return !e.ctrlKey;
       },
-    })
+    });
   }
 
   export = async (
