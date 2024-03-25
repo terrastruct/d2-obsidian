@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "child_process": "^1.0.2",
-    "lodash.debounce": "^4.0.8"
+    "lodash.debounce": "^4.0.8",
+    "panzoom": "^9.4.3"
   }
 }

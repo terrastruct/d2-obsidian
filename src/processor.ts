@@ -3,8 +3,12 @@ import { exec, execSync } from "child_process";
 import { delimiter } from "path";
 import debounce from "lodash.debounce";
 import os from "os";
+import panzoom from "panzoom";
 
 import D2Plugin from "./main";
+
+const MIN_ZOOM = 0.1;
+const MAX_ZOOM = 15;
 
 export class D2Processor {
   plugin: D2Plugin;
@@ -118,6 +122,13 @@ export class D2Processor {
 
     this.formatLinks(svgEl);
     containerEl.innerHTML = this.sanitizeSVGIDs(svgEl, ctx.docId);
+    panzoom(containerEl, {
+      maxZoom: MAX_ZOOM,
+      minZoom: MIN_ZOOM,
+      beforeWheel: (e) => {
+        return !e.ctrlKey;
+      },
+    });
   }
 
   export = async (
